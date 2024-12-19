@@ -1,5 +1,3 @@
-
-
 #   NOXER - Nox Emulator Power Tool <img src="https://sergoot.ru/wp-content/uploads/2021/10/Nox-App-Player-nastrojki.png" alt="Nox Logo" width="40"/>
 
 Automate your Android penetration testing lab setup using Nox Emulator. Noxer is a powerful Python script designed for automating Android penetration testing tasks within the Nox Player emulator. It simplifies setup, enhances stability, manages Frida Server, removes unwanted bloatware, integrates BurpSuite certificates, and much more!
@@ -26,7 +24,7 @@ Automate your Android penetration testing lab setup using Nox Emulator. Noxer is
   - reFlutter
 - **Frida-Tool Options 🛠️:**
    Choose from various Frida-based options, including handling SSL pinning, root check bypass, custom script injection, and more.
-  -  List installed applications
+  - List installed applications
   - SSL Pinning Bypass
   - Root Check Bypass
   - SSL Pinning and Root Check Bypass
@@ -90,10 +88,10 @@ If you face error **No VT Service Detected**. Click here to [Fix Virtualization 
 <img src="https://i.ibb.co/vkHW4bj/image.png" width=300 alt="image" border="0" />
 
 Basically you just need t disable this 4 options in Control
-**Hyper-V**
-**Virtual Machine Platform**
-**Linux Subsystem For Windows**
-**Hypervisor Platform For Windows**
+  - **Hyper-V**
+  - **Virtual Machine Platform**
+  - **Linux Subsystem For Windows**
+  - **Hypervisor Platform For Windows**
 
 **Step: 5** Run **NOXER** script which will automatically sync with running **NOX emulator**.
 <img src="https://i.ibb.co/sRPFS80/STEP-5.png" alt="STEP-5" border="0" />
