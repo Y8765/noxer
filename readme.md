@@ -2,6 +2,9 @@
 
 Automate your Android penetration testing lab setup using Nox Emulator. Noxer is a powerful Python script designed for automating Android penetration testing tasks within the Nox Player emulator. It simplifies setup, enhances stability, manages Frida Server, removes unwanted bloatware, integrates BurpSuite certificates, and much more!
 
+## Important
+- If youre facing errors with connection to the machine, change the port inside the script to one of those 3: **62001,62025,62026**
+
 ## 🚀 Features
 - **Effortless Automation ⚙️:**
   - Automate the setup and configuration of your Android penetration testing lab with ease.
