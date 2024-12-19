@@ -1,15 +1,13 @@
+﻿
 import os
 import subprocess
 import psutil
-import shlex  
-import sys
-import shutil
 import re
 import requests
 from OpenSSL import crypto
 from requests.exceptions import ConnectionError
 
-noxer = """\033[38;5;208m  
+NOXER_BANNER = """\033[38;5;208m  
  __    _  _______  __   __  _______  ______   
 |  |  | ||       ||  |_|  ||       ||    _ |  
 |   |_| ||   _   ||       ||    ___||   | ||  
@@ -21,9 +19,13 @@ ____________NoX Player for GEEKZ______________
            Github: AggressiveUser
                                     Ver-1.22_β
 \033[0m"""
-print(noxer)
+print(NOXER_BANNER)
 
-# Yaar Haryane Te - PANDAT JI :)
+NOX_ADB_PORTS = [62001, 62025, 62026]
+BURP_CERT_URL = "http://127.0.0.1:8080/cert"
+CERT_DER_FILE = "cacert.der"
+CERT_PEM_FILE = "9a5ba575.0"
+FRIPTS_DIR = "./Fripts"
 
 def is_tool_installed(tool):
     try:
@@ -40,8 +42,7 @@ def find_nox_installation_path():
         if 'Nox.exe' in process.info['name']:
             return os.path.dirname(process.info['exe'])
     return None
-    
-#ADB Default Port of Nox Player : 62001,62025,62026
+
 def connect_to_nox_adb(ip='127.0.0.1', port=62001):
     if nox_installation_path:
         adb_command = f'\"{nox_installation_path}\\nox_adb.exe\" connect {ip}:{port}'
@@ -50,51 +51,41 @@ def connect_to_nox_adb(ip='127.0.0.1', port=62001):
     else:
         return "Nox player not installed."
 
-def burpsuite_cacert():
-    cert_url = "http://127.0.0.1:8080/cert"
-    input_der_file = "cacert.der"
-    output_pem_file = "9a5ba575.0"
-
+def download_and_convert_cert():
     try:
-        response = requests.get(cert_url)
-
+        response = requests.get(BURP_CERT_URL)
         if response.status_code == 200:
-            with open(input_der_file, "wb") as certificate_file:
+            with open(CERT_DER_FILE, "wb") as certificate_file:
                 certificate_file.write(response.content)
             print("Burp Suite certificate downloaded successfully.")
 
-            with open(input_der_file, "rb") as der_file:
+            with open(CERT_DER_FILE, "rb") as der_file:
                 der_data = der_file.read()
                 cert = crypto.load_certificate(crypto.FILETYPE_ASN1, der_data)
 
-            with open(output_pem_file, "wb") as pem_file:
+            with open(CERT_PEM_FILE, "wb") as pem_file:
                 pem_data = crypto.dump_certificate(crypto.FILETYPE_PEM, cert)
                 pem_file.write(pem_data)
-
-            os.system(f'\"{nox_installation_path}\\nox_adb.exe\" root')
-            os.system(f'\"{nox_installation_path}\\nox_adb.exe\" remount')
-            os.system(f'\"{nox_installation_path}\\nox_adb.exe\" push {output_pem_file} /system/etc/security/cacerts/')
-            os.system(f'\"{nox_installation_path}\\nox_adb.exe\" shell chmod 644 /system/etc/security/cacerts/{output_pem_file}')
-            print("\x1b[1;32mBurpSuite Certificate Install Successfully in Nox Player\x1b[0m")
-            print("")
-
+            return True
         else:
             print("Error: Unable to download the certificate from the specified URL.")
-
+            return False
     except ConnectionError:
         print("Error: Burp Suite is not running or the proxy server is not on 127.0.0.1:8080.")
-        print("")
+        return False
     except Exception as e:
         print(f"An unexpected error occurred: {str(e)}")
+        return False
 
-def open_adb_shell_from_nox():
-    if nox_installation_path:
-        adb_shell_command = f'\"{nox_installation_path}\\nox_adb.exe\" shell -t su'
-        print("\x1b[1;32mOpening ADB Shell. Type 'exit' to return to the main menu.\x1b[0m")
-        subprocess.run(adb_shell_command, shell=True)
-    else:
-        print("\033[91mNox player not installed.\033[0m")
-    
+def install_burp_cert():
+    if download_and_convert_cert():
+        os.system(f'\"{nox_installation_path}\\nox_adb.exe\" root')
+        os.system(f'\"{nox_installation_path}\\nox_adb.exe\" remount')
+        os.system(f'\"{nox_installation_path}\\nox_adb.exe\" push {CERT_PEM_FILE} /system/etc/security/cacerts/')
+        os.system(f'\"{nox_installation_path}\\nox_adb.exe\" shell chmod 644 /system/etc/security/cacerts/{CERT_PEM_FILE}')
+        print("\x1b[1;32mBurpSuite Certificate Install Successfully in Nox Player\x1b[0m")
+        print("")
+
 def open_adb_shell_from_nox():
     if nox_installation_path:
         adb_shell_command = f'\"{nox_installation_path}\\nox_adb.exe\" shell -t su'
@@ -176,18 +167,37 @@ def remove_ads_and_bloatware():
     noxreboot = f'"{nox_installation_path}\\nox_adb.exe" shell su -c \'setprop ctl.restart zygote\''
     os.system(noxreboot)
     print("")
-  
+
+
+def list_frida_scripts(directory):
+    try:
+        scripts = [f for f in os.listdir(directory) if f.endswith('.js')]
+        return scripts
+    except FileNotFoundError:
+        print(f"\033[91mDirectory {directory} not found.\033[0m")
+        return []
+
+def display_frida_scripts(scripts):
+    print("\033[93mAvailable Frida Scripts:\033[0m")
+    for idx, script in enumerate(scripts, start=1):
+        print(f"{idx}. {script}")
+    print("")
+
+def run_frida_scripts(script_names, package_name):
+    script_args = ' '.join([f'-l {os.path.join(FRIPTS_DIR, script)}' for script in script_names])
+    run_command = f'frida -U {script_args} -f {package_name}'
+    os.system(run_command)
+
 def display_options():
     print("")
     print("\033[93mChoose an option:\033[0m")
     print("1. Windows Tools")
     print("2. NOX Player Options")
-    print("3. Fida-Tools Options")
+    print("3. Frida-Tools Options")
     print("4. Exit")
     print("\033[91mNote: Choose Frida-Tools Option, When Frida-Server is up in your Device/Emulator.\033[0m")
     print("")
 
-    
 def display_windows_tools_options():
     print("")
     print("\033[93mChoose a window tool:\033[0m")
@@ -196,7 +206,7 @@ def display_windows_tools_options():
     print("3. reFlutter")
     print("4. Back")
     print("")
-    
+
 def display_nox_options():
     print("")
     print("\033[93mNox Player options:\033[0m")
@@ -209,7 +219,6 @@ def display_nox_options():
     print("\033[91mNote: Choose \"Run Frida Server\" option, When Frida-Server is installed by NOXER.\033[0m")
     print("")
 
-    
 def frida_tool_options():
     print("")
     print("\033[93mFrida-Tool Options:\033[0m")
@@ -217,7 +226,8 @@ def frida_tool_options():
     print("2. SSL Pinning Bypass")
     print("3. Root Check Bypass")
     print("4. SSL Pinning and Root Check Bypass")
-    print("5. Back")
+    print("5. Run Custom Frida Script")
+    print("6. Back")
     print("\033[91mFrida Custom Script Injection:\033[0m")
     print("\x1b[1;32mfrida -U -l YourFridaScript.js -f com.package.name\033[0m")
     print("")
@@ -243,9 +253,22 @@ def run_frida_tool_option(Frida_Option):
         run_command = f'frida -U -l ./Fripts/PintooR.js -f {package_name}'
         os.system(run_command)
         print("")
+    elif Frida_Option == "5":
+        scripts = list_frida_scripts(FRIPTS_DIR)
+        if scripts:
+            display_frida_scripts(scripts)
+            script_choices = input("\033[38;5;208mEnter the script numbers to run (comma-separated): \033[0m")
+            script_indices = [int(choice.strip()) - 1 for choice in script_choices.split(',') if choice.strip().isdigit()]
+            selected_scripts = [scripts[idx] for idx in script_indices if 0 <= idx < len(scripts)]
+            if selected_scripts:
+                package_name = input("\033[38;5;208mEnter the application package name: \033[0m")
+                run_frida_scripts(selected_scripts, package_name)
+            else:
+                print("\033[91mInvalid script choices.\033[0m")
+        else:
+            print("\033[91mNo Frida scripts found in the directory.\033[0m")
     else:
         print("\033[91mInvalid choice.\033[0m")
-
 
 if __name__ == "__main__":
     while True:
@@ -292,7 +315,7 @@ if __name__ == "__main__":
                         if nox_choice == "6":
                             break
                         elif nox_choice == "5":
-                            burpsuite_cacert()
+                            install_burp_cert()
                         elif nox_choice == "4":
                             open_adb_shell_from_nox()
                         elif nox_choice == "3":
@@ -313,10 +336,10 @@ if __name__ == "__main__":
             while True:
                 frida_tool_options()
                 frida_choice = input("\033[38;5;208mEnter your Frida tool choice: \033[0m")
-                if frida_choice.lower() == "5":
+                if frida_choice.lower() == "6":
                     break
                 run_frida_tool_option(frida_choice)
-            
+        
         elif choice == "4":
             print("\033[91mExiting...\033[0m")
             break
