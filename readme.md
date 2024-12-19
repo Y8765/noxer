@@ -88,11 +88,12 @@ Happy Android pentesting with Nox Emulator! 📱🔒🐍
 
 If you face error **No VT Service Detected**. Click here to [Fix Virtualization / VT Service](https://aggressiveuser.github.io/OnlineTools/FixVirtualization/)
 <img src="https://i.ibb.co/vkHW4bj/image.png" width=300 alt="image" border="0" />
+
 Basically you just need t disable this 4 options in Control
-**Hyper-V
-Virtual Machine Platform
-Linux Subsystem For Windows
-Hypervisor Platform For Windows**
+**Hyper-V**
+**Virtual Machine Platform**
+**Linux Subsystem For Windows**
+**Hypervisor Platform For Windows**
 
 **Step: 5** Run **NOXER** script which will automatically sync with running **NOX emulator**.
 <img src="https://i.ibb.co/sRPFS80/STEP-5.png" alt="STEP-5" border="0" />
