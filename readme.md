@@ -4,10 +4,6 @@
 
 Automate your Android penetration testing lab setup using Nox Emulator. Noxer is a powerful Python script designed for automating Android penetration testing tasks within the Nox Player emulator. It simplifies setup, enhances stability, manages Frida Server, removes unwanted bloatware, integrates BurpSuite certificates, and much more!
 
-## 👋 Connect with me
-
-[![LinkedIn](https://img.shields.io/badge/-LinkedIn-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/AggressiveUser/)](https://www.linkedin.com/in/AggressiveUser/) [![Hack The Box](https://img.shields.io/badge/-Hack%20The%20Box-green?style=flat-square&logo=hack-the-box&logoColor=white&link=https://app.hackthebox.com/profile/17569)](https://app.hackthebox.com/profile/17569) [![GitHub](https://img.shields.io/badge/-GitHub-black?style=flat-square&logo=github&link=https://github.com/AggressiveUser)](https://github.com/AggressiveUser) [![Twitter](https://img.shields.io/badge/-Twitter-blue?style=flat-square&logo=twitter&logoColor=white&link=https://twitter.com/AggressiveUserX)](https://twitter.com/AggressiveUserX) [![Telegram](https://img.shields.io/badge/-Telegram-blue?style=flat-square&logo=telegram&logoColor=white&link=https://t.me/AggressiveUser)](https://t.me/AggressiveUser) [![Email](https://img.shields.io/badge/-Email-red?style=flat-square&logo=Microsoft&logoColor=white&link=mailto:AggressiveUser@OutLook.com)](mailto:AggressiveUser@OutLook.com)
-
 ## 🚀 Features
 - **Effortless Automation ⚙️:**
   - Automate the setup and configuration of your Android penetration testing lab with ease.
@@ -53,7 +49,7 @@ Before running NOXER, ensure you have the required dependencies installed. Follo
 
 1. Clone this repository to your local machine.
     ```
-    git clone https://github.com/AggressiveUser/noxer.git
+    git clone https://github.com/Y8765/noxer.git
     ```
 
 2. Navigate to the project directory.
@@ -91,15 +87,16 @@ Happy Android pentesting with Nox Emulator! 📱🔒🐍
 
 If you face error **No VT Service Detected**. Click here to [Fix Virtualization / VT Service](https://aggressiveuser.github.io/OnlineTools/FixVirtualization/)
 <img src="https://i.ibb.co/vkHW4bj/image.png" width=300 alt="image" border="0" />
+Basically you just need t disable this 4 options in Control
+**Hyper-V
+Virtual Machine Platform
+Linux Subsystem For Windows
+Hypervisor Platform For Windows**
 
 **Step: 5** Run **NOXER** script which will automatically sync with running **NOX emulator**.
 <img src="https://i.ibb.co/sRPFS80/STEP-5.png" alt="STEP-5" border="0" />
 
 **After running the script, you'll be presented with a menu to choose from various options  🫠**
-
-## 🤝 Contributing
-
-Contributions are welcome! If you'd like to enhance the functionality of this tool, please submit a pull request. For major changes, please open an issue first to discuss what you would like to change.
 
 ## 📄 License
 
