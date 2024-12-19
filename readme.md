@@ -30,6 +30,7 @@ Automate your Android penetration testing lab setup using Nox Emulator. Noxer is
   - SSL Pinning Bypass
   - Root Check Bypass
   - SSL Pinning and Root Check Bypass
+  - Run Custom Frida Script
 
 - **Flexible Options 🛠️:**
   - Select from a range of functionalities, including running Frida Server, opening an ADB shell, and more, within an interactive menu system.
